@@ -1,0 +1,293 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080b14">
+  <title>Kewa Trade Tracker</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+  <div class="app-shell">
+    <header class="topbar">
+      <a href="#dashboard" class="brand" data-page="dashboard">
+        <span class="brand-icon">K</span>
+        <span>KEWA<span class="brand-light">TRADE</span></span>
+      </a>
+
+      <button class="menu-btn" id="menuBtn" type="button"
+        aria-label="Toggle navigation">☰</button>
+    </header>
+
+    <div class="layout">
+      <aside class="sidebar" id="sidebar">
+        <div class="side-label">WORKSPACE</div>
+
+        <button class="nav-btn active" data-page="dashboard">
+          <span>▦</span> Dashboard
+        </button>
+        <button class="nav-btn" data-page="trades">
+          <span>⇄</span> Trade Journal
+        </button>
+        <button class="nav-btn" data-page="addTrade">
+          <span>＋</span> Add Trade
+        </button>
+
+        <div class="sidebar-bottom">
+          <div class="storage-card">
+            <span class="status-dot"></span>
+            <div>
+              <strong>Local Storage</strong>
+              <small>Your device, your data</small>
+            </div>
+          </div>
+          <p class="side-note">KEWA TRADE TRACKER<br>Personal trading journal</p>
+        </div>
+      </aside>
+
+      <main class="main-content">
+        <section class="page active" id="dashboardPage">
+          <div class="page-heading">
+            <div>
+              <div class="eyebrow">YOUR TRADING WORKSPACE</div>
+              <h1>Dashboard<span class="heading-dot">.</span></h1>
+              <p class="muted">Track your trades. Learn from your decisions.</p>
+            </div>
+            <button class="primary-btn" data-page="addTrade">＋ Add Trade</button>
+          </div>
+
+          <div class="stats-grid">
+            <article class="stat-card">
+              <div class="stat-top">
+                <span>Total Trades</span><span class="stat-icon">⇄</span>
+              </div>
+              <div class="stat-value" id="totalTrades">0</div>
+              <div class="stat-caption">All recorded trades</div>
+            </article>
+
+            <article class="stat-card">
+              <div class="stat-top">
+                <span>Net P&amp;L</span><span class="stat-icon">↗</span>
+              </div>
+              <div class="stat-value" id="netPnl">₹0.00</div>
+              <div class="stat-caption">Based on your entries</div>
+            </article>
+
+            <article class="stat-card">
+              <div class="stat-top">
+                <span>Win Rate</span><span class="stat-icon">％</span>
+              </div>
+              <div class="stat-value" id="winRate">0%</div>
+              <div class="stat-caption">Closed trades only</div>
+            </article>
+
+            <article class="stat-card">
+              <div class="stat-top">
+                <span>Winning Trades</span><span class="stat-icon">✓</span>
+              </div>
+              <div class="stat-value" id="winningTrades">0</div>
+              <div class="stat-caption" id="losingCaption">0 losing trades</div>
+            </article>
+          </div>
+
+          <div class="content-grid">
+            <article class="panel">
+              <div class="panel-heading">
+                <div>
+                  <h2>Performance Overview</h2>
+                  <p class="muted">Cumulative recorded P&amp;L</p>
+                </div>
+                <span class="mini-badge">JOURNAL</span>
+              </div>
+              <div class="chart-wrap">
+                <canvas id="performanceChart" aria-label="Trade performance chart"></canvas>
+              </div>
+              <div class="chart-legend">
+                <span><i class="legend-dot"></i> Cumulative P&amp;L</span>
+              </div>
+            </article>
+
+            <article class="panel">
+              <div class="panel-heading">
+                <div>
+                  <h2>Markets</h2>
+                  <p class="muted">Your trade distribution</p>
+                </div>
+              </div>
+              <div id="marketBreakdown" class="market-list">
+                <div class="empty-small">Your market breakdown will appear here.</div>
+              </div>
+            </article>
+          </div>
+
+          <article class="panel recent-panel">
+            <div class="panel-heading">
+              <div>
+                <h2>Recent Trades</h2>
+                <p class="muted">Your latest journal entries</p>
+              </div>
+              <button class="text-btn" data-page="trades">View all →</button>
+            </div>
+            <div id="recentTrades" class="trade-list"></div>
+          </article>
+        </section>
+
+        <section class="page" id="tradesPage">
+          <div class="page-heading">
+            <div>
+              <div class="eyebrow">YOUR RECORDS</div>
+              <h1>Trade Journal<span class="heading-dot">.</span></h1>
+              <p class="muted">Review and manage your manual entries.</p>
+            </div>
+            <button class="primary-btn" data-page="addTrade">＋ Add Trade</button>
+          </div>
+
+          <article class="panel">
+            <div class="filters">
+              <input id="searchTrades" type="search" placeholder="Search symbol..."
+                aria-label="Search trades">
+              <select id="filterMarket" aria-label="Filter by market">
+                <option value="all">All markets</option>
+                <option value="Stocks">Stocks</option>
+                <option value="Crypto">Crypto</option>
+                <option value="Forex">Forex</option>
+              </select>
+              <select id="filterResult" aria-label="Filter by result">
+                <option value="all">All results</option>
+                <option value="win">Winning</option>
+                <option value="loss">Losing</option>
+                <option value="open">Open</option>
+              </select>
+            </div>
+            <div id="allTrades" class="trade-list"></div>
+          </article>
+
+          <article class="panel backup-panel">
+            <div>
+              <h2>Data Backup</h2>
+              <p class="muted">Export a JSON backup of your journal.</p>
+            </div>
+            <div class="backup-actions">
+              <button class="secondary-btn" id="exportBtn">Export Backup</button>
+              <button class="secondary-btn" id="importBtn">Import Backup</button>
+              <input type="file" id="importFile" accept=".json,application/json" hidden>
+            </div>
+          </article>
+        </section>
+
+        <section class="page" id="addTradePage">
+          <div class="page-heading">
+            <div>
+              <div class="eyebrow">MANUAL ENTRY</div>
+              <h1 id="formHeading">Add Trade<span class="heading-dot">.</span></h1>
+              <p class="muted">Record a trade in your personal journal.</p>
+            </div>
+          </div>
+
+          <form id="tradeForm" class="panel trade-form">
+            <input type="hidden" id="tradeId">
+
+            <div class="form-section-title">TRADE DETAILS</div>
+
+            <div class="form-grid">
+              <label>
+                Market
+                <select id="market" required>
+                  <option value="Stocks">Stocks</option>
+                  <option value="Crypto">Crypto</option>
+                  <option value="Forex">Forex</option>
+                </select>
+              </label>
+
+              <label>
+                Symbol / Asset
+                <input id="symbol" type="text" placeholder="e.g. RELIANCE, BTCUSDT, EURUSD" required maxlength="30">
+              </label>
+
+              <label>
+                Direction
+                <select id="direction" required>
+                  <option value="Long">Long / Buy</option>
+                  <option value="Short">Short / Sell</option>
+                </select>
+              </label>
+
+              <label>
+                Status
+                <select id="status" required>
+                  <option value="Closed">Closed</option>
+                  <option value="Open">Open</option>
+                </select>
+              </label>
+
+              <label>
+                Entry Price
+                <input id="entryPrice" type="number" min="0" step="any" placeholder="0.00" required>
+              </label>
+
+              <label>
+                Exit Price
+                <input id="exitPrice" type="number" min="0" step="any" placeholder="Required for closed trades">
+              </label>
+
+              <label>
+                Quantity / Units
+                <input id="quantity" type="number" min="0.00000001" step="any" placeholder="1" required>
+              </label>
+
+              <label>
+                Fees (optional)
+                <input id="fees" type="number" min="0" step="any" value="0">
+              </label>
+
+              <label>
+                Trade Date
+                <input id="tradeDate" type="date" required>
+              </label>
+
+              <label>
+                Currency
+                <select id="currency" required>
+                  <option value="INR">INR (₹)</option>
+                  <option value="USD">USD ($)</option>
+                  <option value="EUR">EUR (€)</option>
+                  <option value="GBP">GBP (£)</option>
+                  <option value="USDT">USDT</option>
+                </select>
+              </label>
+            </div>
+
+            <label class="full-label">
+              Notes / Strategy
+              <textarea id="notes" rows="4" maxlength="1000"
+                placeholder="Why did you enter? What did you learn?"></textarea>
+            </label>
+
+            <div class="pnl-preview">
+              <span>Estimated net P&amp;L</span>
+              <strong id="pnlPreview">₹0.00</strong>
+              <small>Calculated from entry, exit, quantity and fees. Open trades show ₹0 until closed.</small>
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="secondary-btn" id="cancelEditBtn">Cancel</button>
+              <button type="submit" class="primary-btn" id="saveTradeBtn">Save Trade</button>
+            </div>
+          </form>
+        </section>
+
+        <footer class="footer">
+          <span>KEWA TRADE TRACKER</span>
+          <span>Your journal stays on this device.</span>
+        </footer>
+      </main>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="./script.js"></script>
+</body>
+</html>
