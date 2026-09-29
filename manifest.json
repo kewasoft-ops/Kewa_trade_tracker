@@ -1,0 +1,13 @@
+
+{
+  "id": "./",
+  "name": "Kewa Trade Tracker",
+  "short_name": "Kewa Trade",
+  "description": "Personal stock, crypto and forex trade journal",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#05050a",
+  "theme_color": "#080812"
+}
