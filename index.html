@@ -7,7 +7,19 @@
   <meta name="theme-color" content="#080b14">
   <title>Kewa Trade Tracker</title>
   <link rel="stylesheet" href="./style.css">
+  <link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#080812">
 </head>
+  <script>
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("./sw.js")
+        .catch((error) => {
+          console.error("Service worker error:", error);
+        });
+    });
+  }
+  </script>
 <body>
 
   <div class="app-shell">
